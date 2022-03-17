@@ -1,2 +1,9 @@
 /*
 !README
+!proxy_provider.py
+!sources/example_module.py
+!modules/cfg_load.py
+!modules/proxy_tester.py
+!modules/rest_api.py
+!modules/source_loader.py
+!modules/tui.py
