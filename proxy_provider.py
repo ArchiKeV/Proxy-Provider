@@ -2,7 +2,6 @@ from multiprocessing import Process, Manager
 from sqlalchemy.orm.session import sessionmaker
 from sqlalchemy import create_engine
 from loguru import logger
-from logging import StreamHandler
 import datetime
 import logging
 import os
