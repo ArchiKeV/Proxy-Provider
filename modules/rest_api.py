@@ -27,7 +27,7 @@ def rest_api(config: RootConfig, db_session: sessionmaker, sm_db_sem, sm_tui_buf
     list_handler = ListHandler(
         sm_tui_buffer, config.system.tui_text_line_buffer_size, sm_change_flag, sm_tui_refresh, log
     )
-    list_handler.setFormatter(logging.Formatter("%(name)s: %(message)s"))
+    list_handler.setFormatter(logging.Formatter("%(message)s"))
     loguru_handler = LoguruHandler(logger)
     loguru_handler.setFormatter(logging.Formatter("%(name)s: %(message)s"))
     log.addHandler(list_handler)
