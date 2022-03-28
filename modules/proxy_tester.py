@@ -15,7 +15,7 @@ def proxy_tester(
 
     with sm_db_sem:
         with db_session.begin() as ses:
-            not_tested_proxy_servers = ses.quary(Proxy).filter(Proxy.ip_out.is_(None)).all()
+            not_tested_proxy_servers = ses.query(Proxy).filter(Proxy.ip_out.is_(None)).all()
     while sm_process_status.value:
         if not_tested_proxy_servers:
             # Proxy testing
