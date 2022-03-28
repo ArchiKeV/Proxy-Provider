@@ -13,6 +13,11 @@ def proxy_tester(
 ):
     sm_processes_id_list.append('proxy_tester_main')
 
+    sources_list = [source_in_cfg.dict() for source_in_cfg in config.proxy.sources]
+    if not sources_list:
+        sm_processes_id_list.remove('proxy_tester_main')
+        return
+
     with sm_db_sem:
         with db_session.begin() as ses:
             not_tested_proxy_servers = ses.query(Proxy).filter(Proxy.ip_out.is_(None)).all()
@@ -46,8 +51,9 @@ def proxy_tester(
             sm_new_proxy_event.wait()
             sm_new_proxy_event.clear()
             # Checking for new proxies
-            with db_session.begin() as ses:
-                not_tested_proxy_servers = ses.query(Proxy).filter(Proxy.ip_out.is_(None))
+            if sm_process_status.value:
+                with db_session.begin() as ses:
+                    not_tested_proxy_servers = ses.query(Proxy).filter(Proxy.ip_out.is_(None))
     sm_processes_id_list.remove('proxy_tester_main')
 
 
