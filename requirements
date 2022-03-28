@@ -2,3 +2,5 @@ loguru
 pydantic
 SQLAlchemy
 click
+PySocks
+requests

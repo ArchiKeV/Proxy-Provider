@@ -8,4 +8,5 @@
 !modules/source_loader.py
 !modules/tui.py
 !modules/classes.py
+!modules/db_init.py
 !requirements

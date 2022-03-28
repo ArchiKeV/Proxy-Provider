@@ -108,6 +108,7 @@ def source_loader(config: RootConfig, sm_db_sem, db_session: sessionmaker, sm_pr
             thread_unlock_event.wait()
             t.join()
         thread_text_compositor.join()
+        sm_new_proxy_event.set()
         sm_processes_id_list.remove('source_loader')
 
 

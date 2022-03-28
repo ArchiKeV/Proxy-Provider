@@ -12,6 +12,7 @@ from modules.cfg_load import load_cfg
 from modules.db_init import base
 from modules.rest_api import rest_api
 from modules.source_loader import source_loader
+from modules.proxy_tester import proxy_tester
 
 # Loguru config .isoformat(' ', 'seconds')
 logging_file_name = f"proxy_provider_{datetime.datetime.now()}.log"
@@ -49,7 +50,7 @@ def main():
         logger.error('DB type is not supported')
         exit()
     base.metadata.create_all(engine)
-    session = sessionmaker(bind=engine)
+    db_session = sessionmaker(bind=engine)
 
     # Start multiprocessor configuration
     menu_items_and_processes_roles = [
@@ -90,7 +91,7 @@ def main():
                 p = Process(target=source_loader, args=(
                     config,
                     sm_db_sem,
-                    session,
+                    db_session,
                     sm_process_status,
                     sm_new_proxy_event,
                     sm_processes_id_list,
@@ -105,6 +106,20 @@ def main():
                 sm_dict_for_buffers.update({role: sm_tui_buffer})
                 sm_change_flag = SM.Value(bool, False)
                 sm_dict_for_change_flags.update({role: sm_change_flag})
+
+                p = Process(target=proxy_tester, args=(
+                    config,
+                    sm_db_sem,
+                    db_session,
+                    sm_process_status,
+                    sm_new_proxy_event,
+                    sm_processes_id_list,
+                    sm_tui_buffer,
+                    sm_change_flag,
+                    sm_tui_refresh
+                ))
+                process_list.append(p)
+                p.start()
             elif role == 'Exit':
                 sm_tui_buffer = SM.list()
                 sm_dict_for_buffers.update({role: sm_tui_buffer})
