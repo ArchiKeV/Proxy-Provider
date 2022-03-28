@@ -4,3 +4,4 @@ SQLAlchemy
 click
 PySocks
 requests
+flask

@@ -79,7 +79,14 @@ def main():
                 sm_change_flag = SM.Value(bool, False)
                 sm_dict_for_change_flags.update({role: sm_change_flag})
 
-                rest_api_p = Process(target=rest_api, args=())
+                rest_api_p = Process(target=rest_api, args=(
+                    config,
+                    db_session,
+                    sm_db_sem,
+                    sm_tui_buffer,
+                    sm_change_flag,
+                    sm_tui_refresh
+                ))
                 process_list.append(rest_api_p)
                 rest_api_p.start()
             elif role == 'Source Loader':
