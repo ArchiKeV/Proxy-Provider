@@ -1,0 +1,4 @@
+loguru
+pydantic
+SQLAlchemy
+click

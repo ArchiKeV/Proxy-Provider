@@ -7,3 +7,5 @@
 !modules/rest_api.py
 !modules/source_loader.py
 !modules/tui.py
+!modules/classes.py
+!requirements
