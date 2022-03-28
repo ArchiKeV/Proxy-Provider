@@ -1,4 +1,4 @@
-import multiprocessing
+import multiprocessing.managers
 import logging
 import loguru
 
