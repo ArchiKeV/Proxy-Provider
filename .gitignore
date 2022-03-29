@@ -2,6 +2,7 @@
 !README
 !proxy_provider.py
 !sources/example_module.py
+!sources/github_TheSpeedX_socks4.py
 !modules/cfg_load.py
 !modules/proxy_tester.py
 !modules/rest_api.py
