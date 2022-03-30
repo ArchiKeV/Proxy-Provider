@@ -43,7 +43,10 @@ def main():
         db_path = config.db.settings.filepath
         base_path = os.path.dirname(os.path.realpath(__file__))
         db_path = os.path.join(base_path, db_path)
-        engine = create_engine(f'sqlite:///{db_path}', echo=True)
+        if config.system.debug:
+            engine = create_engine(f'sqlite:///{db_path}', echo=True)
+        else:
+            engine = create_engine(f'sqlite:///{db_path}')
     else:
         engine = None
         logger.error('DB type is not supported')
