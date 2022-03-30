@@ -15,7 +15,12 @@ base_config = {
         "country_code_ignore_list": [
             "IR"  # Iran
         ],
-        "sources": [],  # check the README for this setting
+        "sources": [
+            {
+                "name": "github_TheSpeedX_socks4",
+                "timer": 7200
+            }
+        ],  # check the README for this setting
         "checkup_timers": {
             "active_server_check_period_in_hours": 1,
             "inactive_server_check_period_in_hours": 24
@@ -47,7 +52,6 @@ class RootConfig(BaseModel):
         class SourcesConfig(BaseModel):
             name: str
             timer: PositiveInt
-            module_path: str
 
         class CTConfig(BaseModel):
             active_server_check_period_in_hours: PositiveInt = 1
