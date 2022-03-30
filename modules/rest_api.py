@@ -22,6 +22,7 @@ click.echo = echo
 click.secho = secho
 
 
+@logger.catch()
 def rest_api(config: RootConfig, db_session: sessionmaker, sm_db_sem, sm_tui_buffer, sm_change_flag, sm_tui_refresh):
     log = logging.getLogger('werkzeug')
     list_handler = ListHandler(
@@ -35,6 +36,7 @@ def rest_api(config: RootConfig, db_session: sessionmaker, sm_db_sem, sm_tui_buf
 
     app = Flask(__name__)
 
+    @logger.catch()
     @app.get("/proxy")
     def proxy():
         with sm_db_sem:
