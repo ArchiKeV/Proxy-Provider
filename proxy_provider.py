@@ -18,7 +18,7 @@ logging_file_name = f"proxy_provider_{datetime.datetime.now()}.log"
 logger.remove()
 logger.add(
     sink=logging_file_name,
-    format="{time} {process} {level} {message}",
+    format="{time} {process} {level} {name} {message}",
     enqueue=True,
     level="TRACE",
     rotation="1000 KB",
