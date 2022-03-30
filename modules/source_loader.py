@@ -64,7 +64,6 @@ def source_loader(
                                 source_db: SourceTimer = ses.query(SourceTimer).filter(
                                     SourceTimer.name == source['name']
                                 ).first()
-                            logger.debug(f"{type(source_db.ts)} {source_db.ts}")
                             if source_db.ts:
                                 source["last_use"] = source_db.ts
                             ses.commit()
