@@ -1,5 +1,7 @@
 from sqlalchemy.orm.session import sessionmaker
 from multiprocessing import Process, Semaphore
+from datetime import datetime, timedelta
+from sqlalchemy import or_, and_
 from loguru import logger
 
 from modules.cfg_load import RootConfig
@@ -20,7 +22,14 @@ def proxy_tester(
 
     with sm_db_sem:
         with db_session(expire_on_commit=False) as ses:
-            not_tested_proxy_servers = ses.query(Proxy).filter(Proxy.ip_out.is_(None)).all()
+            not_tested_proxy_servers = ses.query(Proxy).filter(or_(
+                Proxy.ip_out.is_(None),
+                and_(Proxy.ip_out.isnot(None), or_(
+                    Proxy.status_ts.is_(None),
+                    Proxy.status_ts > datetime.now() +
+                    timedelta(hours=config.proxy.checkup_timers.active_server_check_period_in_hours)
+                ))
+            )).all()
             ses.commit()
     while sm_process_status.value:
         if not_tested_proxy_servers:
@@ -131,6 +140,7 @@ def check_and_update_new_proxy(
                 elif url == "https://wtfismyip.com/json":
                     proxy.ip_out = response.json()['YourFuckingIPAddress']
                     proxy.country_code_out = response.json()['YourFuckingCountryCode']
+                proxy.status_ts = datetime.now()
                 logger.info(f'{url=}__{proxy.ip_in} {proxy.port_in} {proxy.ip_out}')
                 with buffer_semaphore:
                     sm_tui_buffer.remove(f'{proxy.ip_in} {proxy.port_in} NOW')
