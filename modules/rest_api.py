@@ -36,13 +36,12 @@ def rest_api(config: RootConfig, db_session: sessionmaker, sm_db_sem, sm_tui_buf
 
     app = Flask(__name__)
 
-    @logger.catch()
     @app.get("/proxy")
     def proxy():
         with sm_db_sem:
             with db_session.begin() as ses:
                 good_all_proxy = ses.query(Proxy).filter(Proxy.ip_out.isnot(None)).all()
-        return good_all_proxy
+                return good_all_proxy
 
     app.run()
 
