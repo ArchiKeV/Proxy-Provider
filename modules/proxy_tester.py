@@ -90,11 +90,11 @@ def check_and_update_new_proxy(
             sm_tui_buffer.pop(0)
     sm_change_flag.value = True
     sm_tui_refresh.set()
+    socks_proxy = {
+        "http": f"socks{proxy.type}://{proxy.ip_in}:{proxy.port_in}",
+        "https": f"socks{proxy.type}://{proxy.ip_in}:{proxy.port_in}"
+    }
     try:
-        socks_proxy = {
-            "http": f"socks{proxy.type}://{proxy.ip_in}:{proxy.port_in}",
-            "https": f"socks{proxy.type}://{proxy.ip_in}:{proxy.port_in}"
-        }
         response = requests.get(url, proxies=socks_proxy, timeout=(connection_timeout, read_timeout))
     except (requests.exceptions.ConnectTimeout, requests.exceptions.ConnectionError,
             requests.exceptions.ReadTimeout):
