@@ -132,11 +132,11 @@ def check_and_update_new_proxy(
                     proxy.ip_out = response.json()['YourFuckingIPAddress']
                     proxy.country_code_out = response.json()['YourFuckingCountryCode']
                 logger.info(f'{url=}__{proxy.ip_in} {proxy.port_in} {proxy.ip_out}')
-        with buffer_semaphore:
-            sm_tui_buffer.remove(f'{proxy.ip_in} {proxy.port_in} NOW')
-            sm_tui_buffer.append(f'{proxy.ip_in} {proxy.port_in} GOOD')
-            while len(sm_tui_buffer) > config.system.tui_text_line_buffer_size:
-                sm_tui_buffer.pop(0)
+                with buffer_semaphore:
+                    sm_tui_buffer.remove(f'{proxy.ip_in} {proxy.port_in} NOW')
+                    sm_tui_buffer.append(f'{proxy.ip_in} {proxy.port_in} GOOD')
+                    while len(sm_tui_buffer) > config.system.tui_text_line_buffer_size:
+                        sm_tui_buffer.pop(0)
         sm_change_flag.value = True
         sm_tui_refresh.set()
     else:
