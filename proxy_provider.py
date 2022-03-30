@@ -64,6 +64,7 @@ def main():
         sm_processes_id_list = SM.list()
         sm_process_status = SM.Value(bool, True)
         sm_new_proxy_event = SM.Event()
+        sm_timer_event = SM.Event()
 
         # Variables for TUI process
         sm_tui_refresh = SM.Event()
@@ -103,7 +104,8 @@ def main():
                     sm_processes_id_list,
                     sm_tui_buffer,
                     sm_change_flag,
-                    sm_tui_refresh
+                    sm_tui_refresh,
+                    sm_timer_event
                 ))
                 process_list.append(p)
                 p.start()
@@ -134,7 +136,7 @@ def main():
         import modules.tui as tui
         curses_tui_p = Process(target=tui.curses_tui, args=(
             sm_process_status, sm_dict_for_buffers, sm_dict_for_change_flags, sm_tui_refresh,
-            menu_items_and_processes_roles, rest_api_p, sm_processes_id_list
+            menu_items_and_processes_roles, rest_api_p, sm_processes_id_list, sm_timer_event
         ))
         curses_tui_p.start()
         for p in process_list:

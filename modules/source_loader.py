@@ -9,10 +9,15 @@ import importlib.util
 from modules.cfg_load import RootConfig
 from modules.db_init import SourceTimer, Proxy
 
+thread_timer = None
+
 
 @logger.catch()
-def source_loader(config: RootConfig, sm_db_sem, db_session: sessionmaker, sm_process_status, sm_new_proxy_event,
-                  sm_processes_id_list, sm_tui_buffer, sm_tui_change_flag, sm_tui_refresh):
+def source_loader(
+        config: RootConfig, sm_db_sem, db_session: sessionmaker, sm_process_status, sm_new_proxy_event,
+        sm_processes_id_list, sm_tui_buffer, sm_tui_change_flag, sm_tui_refresh, sm_timer_event
+):
+    global thread_timer
     sm_processes_id_list.append('source_loader')
 
     sources_list = [source_in_cfg.dict() for source_in_cfg in config.proxy.sources]
@@ -24,7 +29,6 @@ def source_loader(config: RootConfig, sm_db_sem, db_session: sessionmaker, sm_pr
     else:
         source_list_update_event = Event()
         thread_unlock_event = Event()
-        thread_unlock_event.set()
 
         thread_text_compositor = Thread(
             target=text_compositor,
@@ -39,6 +43,12 @@ def source_loader(config: RootConfig, sm_db_sem, db_session: sessionmaker, sm_pr
                 )
         )
         thread_text_compositor.start()
+
+        thread_wait_event = Thread(
+            target=wait_tui_event,
+            args=(sm_timer_event, thread_unlock_event)
+        )
+        thread_wait_event.start()
 
         while sm_process_status.value:
             for source in sources_list:
@@ -119,13 +129,18 @@ def source_loader(config: RootConfig, sm_db_sem, db_session: sessionmaker, sm_pr
             # 5. Sorted sources_list from 'last_use' in source
             sources_list = sorted(sources_list, key=itemgetter('last_use'))
             second_timer = (datetime.now() - sources_list[0]['next_use']).seconds
-            logger.debug(f'Timer {second_timer}')
-            thread_unlock_event.clear()
-            t = Timer(second_timer, thread_event_unlock, args=(thread_unlock_event, ))
-            t.start()
-            thread_unlock_event.wait()
-            t.join()
+            if sm_process_status.value:
+                thread_timer = Timer(second_timer, thread_event_unlock, args=(thread_unlock_event, ))
+                thread_timer.start()
+                thread_unlock_event.wait()
+                thread_unlock_event.clear()
+                thread_timer.join()
+                thread_timer = None
+            else:
+                break
+        if not source_list_update_event.is_set(): source_list_update_event.set()
         thread_text_compositor.join()
+        thread_wait_event.join()
         sm_new_proxy_event.set()
         sm_processes_id_list.remove('source_loader')
 
@@ -198,3 +213,12 @@ def text_compositor(
         source_list_update_event.wait()
         source_list_update_event.clear()
 
+
+@logger.catch()
+def wait_tui_event(sm_timer_event, thread_unlock_event):
+    global thread_timer
+
+    sm_timer_event.wait()
+    if thread_timer:
+        thread_timer.cancel()
+        thread_unlock_event.set()

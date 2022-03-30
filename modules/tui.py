@@ -151,7 +151,7 @@ def tue_event_loop(
 @logger.catch()
 def main(
         std_scr, sm_p_status, sm_dict_for_buffers, sm_dict_for_change_flags, sm_tui_refresh, menu_items, rest_api_p,
-        sm_p_id_list
+        sm_p_id_list, sm_timer_event
 ):
     global current_item, menu_change_flag, resize_flag, info_frames, tui_refresh_out
     menu_win, info_win = start_tui_init(std_scr, menu_items)
@@ -175,6 +175,7 @@ def main(
         elif key in (KEY_ENTER, 10, 13) and current_item == len(menu_items) - 1:
             sm_p_status.value = False
             rest_api_p.terminate()
+            sm_timer_event.set()
             while True:
                 info_frames += 1
                 info_win.clear()
@@ -199,9 +200,9 @@ def main(
 @logger.catch()
 def curses_tui(
         sm_p_status, sm_dict_for_buffers, sm_dict_for_change_flags, sm_tui_refresh, menu_items, rest_api_p,
-        sm_p_id_list
+        sm_p_id_list, sm_timer_event
 ):
     wrapper(
         main, sm_p_status, sm_dict_for_buffers, sm_dict_for_change_flags, sm_tui_refresh, menu_items, rest_api_p,
-        sm_p_id_list
+        sm_p_id_list, sm_timer_event
     )
