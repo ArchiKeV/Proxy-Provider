@@ -119,6 +119,7 @@ def check_and_update_new_proxy(
         sm_tui_refresh.set()
         with sm_db_sem:
             with db_session.begin() as ses:
+                proxy = ses.merge(proxy)
                 ses.delete(proxy)
         sm_processes_id_list.remove('proxy_tester_child')
         processes_semaphore.release()
@@ -158,6 +159,7 @@ def check_and_update_new_proxy(
             proxy_file.write(response.content)
         with sm_db_sem:
             with db_session.begin() as ses:
+                proxy = ses.merge(proxy)
                 ses.delete(proxy)
         logger.info(f'Error in file when checking {proxy.ip_in} {proxy.port_in}')
         with buffer_semaphore:
