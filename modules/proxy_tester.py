@@ -58,6 +58,7 @@ def proxy_tester(
     sm_processes_id_list.remove('proxy_tester_main')
 
 
+@logger.catch()
 def check_and_update_new_proxy(
         proxy: Proxy, config: RootConfig, db_session: sessionmaker, sm_db_sem, processes_semaphore,
         sm_processes_id_list, sm_tui_buffer, sm_change_flag, sm_tui_refresh, buffer_semaphore
