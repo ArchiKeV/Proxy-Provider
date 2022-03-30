@@ -114,7 +114,8 @@ def check_and_update_new_proxy(
         return
     if response.status_code == 200:
         with sm_db_sem:
-            with db_session.begin():
+            with db_session.begin() as ses:
+                proxy = ses.merge(proxy)
                 if url == "https://ifconfig.co/json":
                     proxy.ip_out = response.json()['ip']
                     proxy.country_code_out = response.json()['country_iso']
