@@ -1,4 +1,3 @@
-import curses
 from curses import wrapper, curs_set, init_pair, COLOR_BLACK, COLOR_WHITE, newwin, A_UNDERLINE, color_pair, KEY_LEFT, \
     KEY_RIGHT, KEY_RESIZE, KEY_ENTER, doupdate
 from _curses import window
@@ -104,7 +103,6 @@ def tui(std_scr, menu_win: window, info_win: window, sm_dict_for_buffers, sm_dic
                         max_len_str = len(str_in_buffer) + 1
                 num_columns = int(screen_buffer_x_size / max_len_str)
                 if num_columns > 1:
-                    logger.debug(f'Num of columns > 1. {num_columns=}')
                     new_buffer = []
                     new_str_data = ''
                     cur_num_col = 0
