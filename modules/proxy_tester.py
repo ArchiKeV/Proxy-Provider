@@ -62,8 +62,9 @@ def proxy_tester(
             sm_new_proxy_event.clear()
             # Checking for new proxies
             if sm_process_status.value:
-                with db_session.begin() as ses:
-                    not_tested_proxy_servers = ses.query(Proxy).filter(Proxy.ip_out.is_(None))
+                with sm_db_sem:
+                    with db_session.begin() as ses:
+                        not_tested_proxy_servers = ses.query(Proxy).filter(Proxy.ip_out.is_(None))
     sm_processes_id_list.remove('proxy_tester_main')
 
 
