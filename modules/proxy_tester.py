@@ -19,8 +19,9 @@ def proxy_tester(
         return
 
     with sm_db_sem:
-        with db_session.begin() as ses:
+        with db_session(expire_on_commit=False) as ses:
             not_tested_proxy_servers = ses.query(Proxy).filter(Proxy.ip_out.is_(None)).all()
+            ses.commit()
     while sm_process_status.value:
         if not_tested_proxy_servers:
             # Proxy testing
