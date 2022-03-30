@@ -25,7 +25,7 @@ def proxy_tester(
     while sm_process_status.value:
         if not_tested_proxy_servers:
             # Proxy testing
-            processes_semaphore = Semaphore(config.db.settings.concurrent_slots)
+            processes_semaphore = Semaphore(config.proxy.num_of_simultaneous_checks)
             buffer_semaphore = Semaphore()
             process_list = []
             for proxy in not_tested_proxy_servers:
