@@ -82,7 +82,9 @@ def check_and_update_new_proxy(
     read_timeout = config.proxy.timeouts.read_timeout
 
     url_with_captcha = [
-        "https://ifconfig.co/json"
+        "https://ifconfig.co/json",
+        "https://ifconfig.io/all.json",
+        "https://api.ip.sb/geoip"
     ]
     urls = [
         "https://freegeoip.app/json",
@@ -90,7 +92,7 @@ def check_and_update_new_proxy(
         "https://ip-api.io/json",
         "https://ipinfo.io/json",
         "https://wtfismyip.com/json",
-        "https://ifconfig.io/all.json"
+        "https://api.hostip.info/get_json.php"
     ]
     url = random.choice(urls)
     with buffer_semaphore:
@@ -130,7 +132,7 @@ def check_and_update_new_proxy(
                     proxy.country_code_out = response.json()['country_iso']
                 elif url in [
                     "https://freegeoip.app/json", "https://ipwhois.app/json/", "https://ip-api.io/json",
-                    "https://ifconfig.io/all.json"
+                    "https://ifconfig.io/all.json", "https://api.ip.sb/geoip", "https://api.hostip.info/get_json.php"
                 ]:
                     proxy.ip_out = response.json()['ip']
                     proxy.country_code_out = response.json()['country_code']
