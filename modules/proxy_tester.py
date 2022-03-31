@@ -150,7 +150,7 @@ def check_and_update_new_proxy(
                     proxy.ip_out = response.json()['YourFuckingIPAddress']
                     proxy.country_code_out = response.json()['YourFuckingCountryCode']
                 proxy.status_ts = datetime.now()
-                logger.info(f'{url=}__{proxy.ip_in} {proxy.port_in} {proxy.ip_out}')
+                logger.info(f'GOOD proxy {proxy.ip_in} {proxy.port_in} {proxy.ip_out} via {url}')
                 with buffer_semaphore:
                     sm_tui_buffer.remove(f'{proxy.ip_in} {proxy.port_in} NOW')
                     sm_tui_buffer.append(f'{proxy.ip_in} {proxy.port_in} GOOD')
