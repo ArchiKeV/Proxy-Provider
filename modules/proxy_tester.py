@@ -88,12 +88,12 @@ def check_and_update_new_proxy(
     read_timeout = config.proxy.timeouts.read_timeout
 
     url_with_captcha = [
+        "https://freegeoip.app/json",
         "https://ifconfig.co/json",
         "https://ifconfig.io/all.json",
         "https://api.ip.sb/geoip"
     ]
     urls = [
-        "https://freegeoip.app/json",
         "https://ipwhois.app/json/",
         "https://ip-api.io/json",
         "https://ipinfo.io/json",
