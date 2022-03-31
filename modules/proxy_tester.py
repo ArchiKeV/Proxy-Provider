@@ -41,6 +41,11 @@ def proxy_tester(
                 if not sm_process_status.value:
                     break
                 processes_semaphore.acquire()
+                for num in range(len(process_list)):
+                    if process_list[num].exitcode is not None:
+                        process_list[num].join()
+                        process_list.pop(num)
+                        break
                 p = Process(target=check_and_update_new_proxy, args=(
                     proxy,
                     config,
