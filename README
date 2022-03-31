@@ -36,8 +36,8 @@ Windows:
 Service architecture:
     Input data:
           The input data for the service is described in the configuration file "config.json" created when the service
-          is first started. It, among other things, describes all the used sources of proxy servers, their configuration
-          will be discussed below.
+          is first started. It, among other things, describes all the used sources of proxy servers, their
+          configuration will be discussed below.
     Sources of proxy servers:
         Proxy sources are provided as a Python 3 module located in the "./sources" directory. An example module is
         described in ./sources/example_module.py. Such a module should independently obtain lists of proxy servers and
@@ -56,13 +56,13 @@ Service architecture:
                 'type': 5
             }
         ]
-        Parameter "country_code_in" - ISO code of the country of entry into the proxy server, the parameter is optional,
-        but desirable. This setting is used to filter out unwanted provider countries. The list of unwanted countries is
-        described in config.json (details below). If there is no information about the country of entry, the parameter
-        should be filled with the value "None".
+        Parameter "country_code_in" - ISO code of the country of entry into the proxy server, the parameter is
+        optional, but desirable. This setting is used to filter out unwanted provider countries. The list of unwanted
+        countries is described in config.json (details below). If there is no information about the country of entry,
+        the parameter should be filled with the value "None".
     Checking proxy servers:
-        Available proxies are checked by visiting a site with connection information through the proxy server. From this
-        information, data on the Country of exit and the exit IP address are taken.
+        Available proxies are checked by visiting a site with connection information through the proxy server. From
+        this information, data on the Country of exit and the exit IP address are taken.
     Provision of verified proxies:
         Verified proxies are provided by the FLASK server as a REST API (currently only getting tested servers is
         available).
@@ -101,4 +101,4 @@ Configuration file:
 
     system.tui_text_line_buffer_size - String buffer for TUI (default - 500)
 
-    system.debug - Debug mode (default - False). Currently affects the behavior of sqlalchemy and does not affect logs.
+    system.debug - Debug mode (default - False). Currently affects the behavior of sqlalchemy and does not affect logs
