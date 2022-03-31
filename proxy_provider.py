@@ -12,6 +12,7 @@ from modules.db_init import base
 from modules.rest_api import rest_api
 from modules.source_loader import source_loader
 from modules.proxy_tester import proxy_tester
+from modules.tui import curses_tui
 
 # Loguru config .isoformat(' ', 'seconds')
 logging_file_name = f"proxy_provider_{datetime.datetime.now()}.log"
@@ -136,8 +137,7 @@ def main():
                 sm_dict_for_buffers.update({role: sm_tui_buffer})
                 sm_change_flag = SM.Value(bool, False)
                 sm_dict_for_change_flags.update({role: sm_change_flag})
-        import modules.tui as tui
-        curses_tui_p = Process(target=tui.curses_tui, args=(
+        curses_tui_p = Process(target=curses_tui, args=(
             sm_process_status, sm_dict_for_buffers, sm_dict_for_change_flags, sm_tui_refresh,
             menu_items_and_processes_roles, rest_api_p, sm_processes_id_list, sm_timer_event
         ))
