@@ -11,3 +11,7 @@
 !modules/classes.py
 !modules/db_init.py
 !requirements
+!init.bat
+!init.sh
+!run.bat
+!run.sh
