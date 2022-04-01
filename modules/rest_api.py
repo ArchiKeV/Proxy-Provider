@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, jsonify
 from sqlalchemy.orm import sessionmaker
 from loguru import logger
 import logging
@@ -40,8 +40,11 @@ def rest_api(config: RootConfig, db_session: sessionmaker, sm_db_sem, sm_tui_buf
     def proxy():
         with sm_db_sem:
             with db_session.begin() as ses:
-                good_all_proxy = ses.query(Proxy).filter(Proxy.ip_out.isnot(None)).all()
-                return good_all_proxy
+                raw_good_all_proxy_list = ses.query(Proxy).filter(Proxy.ip_out.isnot(None)).all()
+                good_all_proxy_list = [
+                    {"ip": prx.ip_in, "port": prx.port_in, "type": prx.type} for prx in raw_good_all_proxy_list
+                ]
+        return jsonify(good_all_proxy_list)
 
     app.run()
 
