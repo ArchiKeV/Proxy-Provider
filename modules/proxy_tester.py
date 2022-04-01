@@ -131,24 +131,25 @@ def check_and_update_new_proxy(
         processes_semaphore.release()
         return
     if response.status_code == 200:
+        proxy_dict = response.json()
         with sm_db_sem:
             with db_session.begin() as ses:
                 proxy = ses.merge(proxy)
                 if url == "https://ifconfig.co/json":
-                    proxy.ip_out = response.json()['ip']
-                    proxy.country_code_out = response.json()['country_iso']
+                    proxy.ip_out = proxy_dict['ip']
+                    proxy.country_code_out = proxy_dict['country_iso']
                 elif url in [
                     "https://freegeoip.app/json", "https://ipwhois.app/json/", "https://ip-api.io/json",
                     "https://ifconfig.io/all.json", "https://api.ip.sb/geoip", "https://api.hostip.info/get_json.php"
                 ]:
-                    proxy.ip_out = response.json()['ip']
-                    proxy.country_code_out = response.json()['country_code']
+                    proxy.ip_out = proxy_dict['ip']
+                    proxy.country_code_out = proxy_dict['country_code']
                 elif url == "https://ipinfo.io/json":
-                    proxy.ip_out = response.json()['ip']
-                    proxy.country_code_out = response.json()['country']
+                    proxy.ip_out = proxy_dict['ip']
+                    proxy.country_code_out = proxy_dict['country']
                 elif url == "https://wtfismyip.com/json":
-                    proxy.ip_out = response.json()['YourFuckingIPAddress']
-                    proxy.country_code_out = response.json()['YourFuckingCountryCode']
+                    proxy.ip_out = proxy_dict['YourFuckingIPAddress']
+                    proxy.country_code_out = proxy_dict['YourFuckingCountryCode']
                 proxy.status_ts = datetime.now()
                 logger.info(f'GOOD proxy {proxy.ip_in} {proxy.port_in} {proxy.ip_out} via {url}')
                 with buffer_semaphore:
