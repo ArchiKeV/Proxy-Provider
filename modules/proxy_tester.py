@@ -91,14 +91,14 @@ def check_and_update_new_proxy(
         "https://freegeoip.app/json",
         "https://ifconfig.co/json",
         "https://ifconfig.io/all.json",
-        "https://api.ip.sb/geoip"
+        "https://api.ip.sb/geoip",
+        "https://api.hostip.info/get_json.php"
     ]
     urls = [
         "https://ipwhois.app/json/",
         "https://ip-api.io/json",
         "https://ipinfo.io/json",
-        "https://wtfismyip.com/json",
-        "https://api.hostip.info/get_json.php"
+        "https://wtfismyip.com/json"
     ]
     url = random.choice(urls)
     with buffer_semaphore:
