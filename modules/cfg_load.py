@@ -78,7 +78,7 @@ class RootConfig(BaseModel):
 def load_cfg():
     if not os.path.isfile("config.json"):
         with open('config.json', 'w') as config_file:
-            json.dump(base_config, config_file)
+            json.dump(base_config, config_file, sort_keys=True, indent=2)
         logger.info("Run without config file. Config file created")
         config = RootConfig.parse_obj(base_config)
     else:
