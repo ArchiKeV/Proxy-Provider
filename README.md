@@ -100,7 +100,9 @@ The configuration file consists of three sections - `db`, `proxy`, `system`. Eac
 `country_code_ignore_list` - List of 2-letter codes of unwanted countries whose proxies will not be added to the database. Default - `["IR", ]`
 
 `sources` - List of proxy server source dictionaries:
+
 `    "name": str` - Module name and display name, DO NOT end with `.py` 
+
 `    "timer": int` - Source reload timer, in seconds. It should be set based on the source update frequency and large enough so as not to be aggressive towards the source server (so as not to be banned)
 
 `checkup_timers.active_server_check_period_in_hours` - Timer in hours, for working servers  
